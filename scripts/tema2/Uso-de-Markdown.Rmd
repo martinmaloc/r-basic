@@ -1,0 +1,84 @@
+---
+title: "Uso de Markdown"
+author: "Martin Malo"
+date: "27/6/2021"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+# Título 1
+
+## Título 2
+ 
+### Titulo 3
+
+#### Título 4   
+
+##### Título 5
+
+###### Título 6
+
+Esto es un texto llano. Podemos escribir sin ningun problema el texto que quermamos para acompaÃ±ar a tanto el codigo `R` como las fórmulas en \LaTeX. 
+
+Esto seria una nueva línea de texto. Markdown reconoce como nueva línea de texto al doble enter
+
+Para colocar en cursiva podemos usar un asterisco: *esto seria un texto en cursiva* o bien usar un guion bajo _esto seria un texto en cursiva_.
+
+Para colocar negrita podemos usar un doble asterisco: **esto seria un texto en negrita** o bien usar un doble guion bajo __esto seria un texto en negrita__
+
+Los superindices van con el *sombrerito*. Este curso vale por mi nota^2^. Martin^estudianteonline^.
+
+Para tachar una palabra usamos una doble tilde ~~Las matemáticas son un lío~~
+
+Para conocer mas los cursos de Juan Gabriel, podemos visitar su [perfil en Udemy](https://www.udemy.com/) 
+
+
+endash: -- Y entonces Juan Gabriel dijo: ....
+
+emdash: ... --- como Juan Gabriel quería explicar.
+
+elipsis: ... 
+
+ecuaciones en línea $S = \pi\cdot r^2$.
+
+imagen ![](../../teoria/Imgs/logo.png) 
+
+***
+
+Aqui empezamos otra cosa
+
+> Esto es una cita en bloque
+
+### Listas no ordenadas
+
+* Item primero
+* Item segundo
+    + Sub item 1
+    + Sub item 2
+    + Sub item 3
+* Item tercero
+* ...  
+
+__Siempre dar espacio luego del asterico o la suma para que aplique la lista__
+  
+
+### Listas ordenadas
+
+1. Primer item
+2. Segundo item 
+    + Sub item de 2
+1. Tercer item
+23. Cuarto item
+
+## Tablas
+
+Alumno         |   Nota    |  Edad
+---------------|-----------|----------
+Juan Gabriel   |  3.5      |  32
+Ricardo        |  4.5      |  20
+Maria          |  9.3      | 24
+Antonio        |  3.1      |   22
+
+
+
