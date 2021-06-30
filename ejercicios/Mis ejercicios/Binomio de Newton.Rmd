@@ -29,10 +29,13 @@ $$(a+b)^n = \sum_{k=0}^n {n\choose k}\cdot a^{n-k}\cdot b^k = {n\choose 0} \cdot
 
 ```{r}
 binomioNewton <- function(a, b, n){
-  cumsum(choose(n,(0:n)) * a^{n-(0:n)} * b^(0:n))[n + 1]
+  cumsum(choose(n,(0:n)) * a^{n-(0:n)} * b^(0:n))
 }
-binomioNewton(2,2,3)
+binomioNewton(2,1,4)
 ```
+
+`choose()` va a crear un coeficiente binomial o en otras palabras los valores para cada nivel de n de la piramide de pascal
+
 
 
 
