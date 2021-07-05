@@ -1,15 +1,9 @@
 ---
-title: "Estructura de datos en R"
+title: "Estructura de datos con R"
 author: "Martin Malo"
 date: "30/6/2021"
 output: pdf_document
 ---
-
-```{r}
-rep(1997,10)
-vec <- c(16,0,1,20,1,7,88,5,1,9)
-fix(vec)
-```
 
 Para saber si dos numeros son divisibles entre ellos se debe evaluar el resto donde este debe ser igual a 0
 
@@ -144,7 +138,7 @@ which(x == max(x))
 
 `x[4:8]`no va a mostrar los vectores desde la posicion 4 hasta la 8. 
 
-`x[8:4]`mostrará los vectores desde la poscion 4 hasta la 8 invertido.
+`x[8:4]`mostrarÃ¡ los vectores desde la poscion 4 hasta la 8 invertido.
 
 ***
 
@@ -176,9 +170,9 @@ which(x == max(x))
 
 `x[x < 10 | x > 40]` va a mostrar los valores menores a 10 y mayores a 40
 
-`x[x %% 2 == 0]` va a mostrar solamente los valores par. Lo hace mediante el resto donde si yo divido un numero par para 2, el resto siempre deberá ser 0
+`x[x %% 2 == 0]` va a mostrar solamente los valores par. Lo hace mediante el resto donde si yo divido un numero par para 2, el resto siempre deberÃ¡ ser 0
 
-`x[x %% 2 == 1]` va a mostrar solo los valores impar. Si yo divido un numero impar par 2, este siempre tendrá un resto igual a 1
+`x[x %% 2 == 1]` va a mostrar solo los valores impar. Si yo divido un numero impar par 2, este siempre tendrÃ¡ un resto igual a 1
 
 ***
 
@@ -210,7 +204,7 @@ Cuando no existe un valor en el vector que cumpla una condicion, R devuelve nume
 ```{r, eval=FALSE}
 which(x > 0 & x < 2)
 ```
-Asi mismo, si no existen valores para cumplir una condicion, no habran posiciones, por lo que al usar la funcion `which()` R devolverá integer(0).
+Asi mismo, si no existen valores para cumplir una condicion, no habran posiciones, por lo que al usar la funcion `which()` R devolverÃ¡ integer(0).
 
 # Los NAs ---------------------------------------------------------------------
 
@@ -245,7 +239,7 @@ attr(x_clean, "na.action") <- NULL
 
 `x[(length(x) - 3):length(x)] <- 0` El ultimo valor mas otros tres fueron reemplazados por 0
 
-`x[(length(x) + 9)] <- 9` Desde la ultima posicion añade 8 nuevas posiciones y en la novena pon el 9. Aqui en esas 8 posiciones adicionales que no tienen valores, R pone NAs. Si un vector tiene por lo menos un NA, ya no se pueden realizar operaciones
+`x[(length(x) + 9)] <- 9` Desde la ultima posicion aÃ±ade 8 nuevas posiciones y en la novena pon el 9. Aqui en esas 8 posiciones adicionales que no tienen valores, R pone NAs. Si un vector tiene por lo menos un NA, ya no se pueden realizar operaciones
 
 `sum(x, na.rm = TRUE)` Con na.rm le decimos a la funcion que no tome en cuenta los NA por lo que es capaz de realizar la suma
 
@@ -260,6 +254,182 @@ La funcion cumsum no admite el na.rm por lo que se utiliza asi: `cumsum(y[!is.na
 Con `na.omit()` podemos eliminar los NAs pero no es recomendable
 
 Cuando usamos `na.omit()` en el resultado nos quedan unos atributos y para eliminarlos le indicamos a R que los convierta en NULL a esos atributos de la siguiente manera: `attr(x_clean, "na.action") <- NULL`
+
+# Factores
+
+Los factores son vectores especiales donde a cada valor se le puede calsificar por nivel
+
+```{r}
+nombres <- c("Juan", "Ricardo", "Sebastian", "Juan", "Juan", "Maria", "Maria")
+nombres.factor <- factor(nombres)
+
+gender <- c("H", "M", "M", "H", "M", "H", "M", "H", "M")
+gender.factor <- factor(gender)
+gender.factor2 <- as.factor(gender)
+gender.factor3 <- factor(gender, levels = c("H", "M", "B"))
+gender.factor4 <- factor(gender, levels = c("H", "M", "B"), 
+                         labels = c("Hombre", "Mujer", "Hermafrodita"))
+
+levels(gender.factor4)
+levels(gender.factor4) <- c("Masculino", "Femenino", "Híbrido")
+
+notas <- c(1,4,3,2,4,3,2,2,1,1,3,3,4,4,2,2,3,2)
+notas.factor <- factor(notas)
+levels(notas.factor)
+levels(notas.factor) <- c("Suspendido", "Suficiente", "Notable", "Excelente")
+levels(notas.factor) <- c("Suspendido", "Aprobado", "Aprobado", "Aprobado")
+
+notas.orden <- ordered(notas, labels = c("Sus", "Suf", "Not", "Exc"))
+```
+
+`factor` es la funcion que a un vector lo transforma en factor.
+
+`levels = `muestra y permite cambiar los niveles del vector
+
+`labels = `muestra y permite cambiar las etiquetas del vector
+
+Al usar `factor()`esta funcion no considera una jerarquia, pues habran casos donde el vector tenga valores que necesiten ser aplicados jerarquicamente. Para resolver esto, se utiliza la funcion `ordered()`
+
+# Listas
+
+Las listas son un conjunto de vectores de diferes tipos, pueden ser de character, integer, numeric, complex, logical. Tambien pueden ademas de mezclar vectores, incluir matrices y dataframes
+
+```{r, eval=FALSE}
+x <- c(1,5,-2,-3,2.5,3,5,-3.5)
+L <- list(nombre = "Temperaturas", datos = x, media = mean(x), sumas = cumsum(x))
+L$sumas
+L$datos
+L[[4]]
+L[[2]]
+
+str(L)
+names(L)
+
+```
+
+`list()` es la funcion para crear listas, y en sus parametros hay que especificar el nombre de la categoria y que datos van dentro de esa categoria.
+
+Para acceder a una categoria de lista se puede utilizar el $ o [[ ]], si se utiliza un [ ], esta no le combierte en un vector individual y no se podrian hacer operaciones con el.
+
+`str()`muestra la estructura de la lista
+
+`names()`muestra los nombres de las categorias de la lista
+
+# Matrices
+
+```{r}
+M <- matrix(1:12, nrow = 4)
+M <- matrix(1:12, nrow = 4, byrow = T)
+
+matrix(1, nrow = 4, ncol = 7)
+
+rbind(M, c(3,2,4), c(-3,-2,4))
+cbind(M, c(3,2,4,-2,3,4))
+
+diag(c(1,2,3,4))
+diag(5, nrow = 5)
+diag(M)
+
+M[2,]
+M[, 2]
+M[c(1,3,4), 1:3]
+
+ncol(M)
+nrow(M)
+dim(M)
+sum(M)
+prod(M)
+mean(M)
+
+colSums(M)
+rowSums(M)
+colMeans(M)
+rowMeans(M)
+
+apply(M, MARGIN = 1, FUN = function(x){sqrt(sum(x^2))})
+apply(M, MARGIN = 2, FUN = function(x){sqrt(sum(x^2))})
+apply(M, MARGIN = c(1,2), FUN = function(x){x^2})
+
+```
+
+Para crear una matriz se utiliza la funcion `matrix()`indicando los datos que se van a utilizar. Todos los datos deben ser del mismo tipo. Hay que indicar cuantas filas con nrow y columnas con ncol
+
+`byrow =` indica por default con FALSE que no se ordene por fila pero si pones TRUE va a ordenar los datos por fila
+
+`rbind()` puede crear matrices como tambien agrega filas a una matriz existente. Para que funcione el numero de datos a agregar deben ser iguales al de la matriz ya existente. Para hacer lo mismo pero a la columnas se utiliza `cbind()`
+
+`diag()`sirve para crear una matriz donde solo tenga valores la diagonal de esa matriz, colocando en los demas espacios de la matriz 0. Tambien sirve para mostrar la diagonal de una matriz existente
+
+Podemos acceder a valores especificos de una matriz con [ ]. Si queremos acceder a una fila entera en especifico hacemos [x, ] y a una columna [, x]
+
+`ncol(M), nrow(M), dim(M), sum(M),prod(M), mean(M)` estas funcinoes muestran el numero de columnas y filas, la dimension de la matriz, la suma que da de todos los valores de la matriz, la multiplicacion de todos los valores de la matriz y la media de la matriz
+
+`colSums(M)`suma cada columna 
+
+`rowSums(M)`suma cada fila
+
+`colMeans(M)`calcula la media de cada columna
+
+`rowMeans(M)`calcula la media de cada fila
+
+`apply(M, MARGIN = 1, FUN = function(x){sqrt(sum(x^2))})` la funcion apply sirve para aplicar funciones a la matriz dada. MARGIN = 1 aplicara la funcion por por fila 
+
+`apply(M, MARGIN = 2, FUN = function(x){sqrt(sum(x^2))})` MARGIN = 2 aplicara la funcion a las columnas de la matriz
+
+`apply(M, MARGIN = c(1,2), FUN = function(x){x^2})` MARGIN = c(1,2) aplicara la funcion a las filas y columnas de la matriz
+
+```{r}
+t(M)
+
+M %*% t(M)
+
+det(A)
+det(B)
+qr(A)$rank
+solve(B)
+round(solve(A) %*% A, 2)
+solve(A, c(1,2,3))
+```
+
+```{r}
+A <- rbind(c(2,0,2), c(1,2,3), c(0,1,3))
+B <- rbind(c(3,2,1), c(1,0,0), c(1,1,1))
+
+A %*% B
+
+mtx.exp(A, 2)
+mtx.exp(B, 2)
+```
+
+```{r}
+M <- rbind(c(2,6,-8), c(0,6,-3), c(0,2,1))
+P <- eigen(M)$vectors
+D <- diag(eigen(M)$values)
+solve(P)
+
+descomposicion_canonica <- round(P %*% D %*% solve(P), 2)
+
+M == descomposicion_canonica
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,159 @@
+---
+title: "Ejercicios de LaTeX, R y Markdown"
+author: "Martin Malo"
+date: "1/7/2021"
+output: html_document
+---
+
+# Pregunta 1
+ 
+Realizad los siguientes productos de matrices siguiente en R:
+
+$$A \cdot B$$
+
+$$B \cdot A$$
+
+$$(A \cdot B)^{t}$$
+
+$$B^{t} \cdot A$$
+
+$$(A \cdot B)^{-1}$$
+
+$$A^{-1} \cdot B^{t}$$
+
+
+
+Donde:
+
+
+
+$$A = \begin{equation*}
+
+\begin{pmatrix}
+
+1 & 2 & 3 & 4\\ 4 & 3 & 2 & 1\\ 0 & 1 & 0 & 2 \\ 3 & 0 & 4 & 0
+
+\end{pmatrix}
+
+\end{equation*}$$
+
+$$B = \begin{equation*}
+
+\begin{pmatrix}
+
+4 & 3 & 2 & 1\\ 0 & 3 & 0 & 4\\ 1 & 2 & 3 & 4 \\ 0 & 1 & 0 & 2
+
+\end{pmatrix}
+
+\end{equation*}$$
+
+Con `rbind()` vamos a introducir las matrices a \r\ indicando los valores que iran en cada fila con la funcion `c()`.
+
+```{r}
+A <- rbind(c(1,2,3,4), c(4,3,2,1), c(0,1,0,2), c(3,0,4,0))
+B <- rbind(c(4,3,2,1), c(0,3,0,4), c(1,2,3,4), c(0,1,0,2))
+```
+
+Para realizar una multiplicacion entre matrices como $A \cdot B$ y $B \cdot A$ s se debe emplear %*%
+
+```{r}
+A %*% B
+B %*% A
+```
+
+Vamos a realizar la siguiente expresion : $(A \cdot B)^t$. Para que una matriz sea elevada a cualquier numero se debe usar el paquete Biodem donde encontraremos a la funcion `mtx.exp(matriz, n)`. Para el ejemplo realizaremos $(A \cdot B)^2$
+
+```{r, eval=F}
+library(Biodem)
+mtx.exp(A %*% B, 2)
+t(A%*%B)
+```
+
+Ahora realizaremos $B^t \cdot A$ reemplazando $t$ con $2$
+
+```{r, eval=F}
+mtx.exp(B, 2) %*% A
+```
+
+Seguiremos con $(A \cdot B)^{-1}$
+
+```{r, eval=F}
+mtx.exp(A %*% B, -1)
+```
+
+Por ultimo $A^{-1} \cdot B^t$ donde reemplazaremos a $t$ con $3$
+
+```{r, eval=F}
+mtx.exp(A, -1) %*% mtx.exp(B, 3)
+```
+
+
+# Pregunta 2
+
+Considerad en un vector los números de vuestro DNI y llamadlo dni. Por ejemplo, si vuestro DNI es 54201567K, vuestro vector será
+
+$$dni = (5, 4, 2, 0, 1, 5, 6, 7)$$
+
+Definid el vector en R. Calculad con R el vector dni al cuadrado, la raíz cuadrada del vector dni y, por último,
+
+la suma de todas las cifras del vector dni.
+
+Finalmente, escribid todos estos vectores también a \LATEX
+
+
+***
+
+```{r, eval=F}
+dni <- c(5,4,2,0,1,5,6,7)
+dni^2
+sqrt(dni)
+sum(dni)
+```
+
+$$dni^2 = (25,16,4,0,1,25,36,49)$$
+
+$$\sqrt{dni} = (2.24,2,1.41,0,1,2.24,2.45,2.65)$$
+
+$$\sum_{i=0}^n dni = 30$$
+
+
+# Pregunta 3
+
+Considerad el vector de las letras de vuestro nombre y apellido. Llamadlo name. Por ejemplo, en mi caso sería
+
+$$name = (M, A, R, I, A, S, A, N, T, O, S)$$
+
+Definid dicho vector en R. Calculad el subvector que solo contenga vuestro nombre. Calculad también el subvector que contenga solo vuestro apellido. Ordenadlo alfabéticamente. Cread una matriz con este vector.
+
+Redactad todos vuestros resultados y utilizad LATEX cuando pertoque
+
+```{r,eval=F}
+name <- c("M","A","R","T","I","N","M","A","L","O")
+```
+
+$name = (M,A,R,T,I,N,M,A,L,O)$
+
+```{r,eval=F}
+name[1:6]
+```
+
+$name[1:6] = (M,A,R,T,I,N)$
+
+```{r,eval=F}
+name[7:10]
+```
+
+$name[7:10] = (M,A,L,O)$
+
+```{r,eval=F}
+sort(name)
+```
+
+$sort(name) = (A,A,I,L,M,M,N,O,R,T)$
+
+```{r,eval=F}
+matrix(sort(name), nrow = 2)
+```
+
+$name = \begin{equation*} \begin{pmatrix} A & I & M & N & R \\ A & L & M & O & T \end{pmatrix} \end{equation*}$
+

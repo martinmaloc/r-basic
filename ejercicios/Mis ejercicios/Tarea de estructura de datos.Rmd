@@ -1,0 +1,115 @@
+---
+title: 'Tarea 3: Estructura de datos'
+author: "Martin Malo"
+date: "1/7/2021"
+output: pdf_document
+---
+
+1. Cread un vector llamado "Harry" formado por la sucesión de números consecutivos entre el -10 y 27. Pedidle a R que os devuelva el elemento de índice 7. Escribid el resultado.
+
+```{r}
+Harry <- seq(-10, 27, 1)
+Harry[7]
+```
+
+2. Dad el máximo de la sucesión (100*2^n -7*3^n) con n=0,...,200
+
+```{r}
+n <- 0:200
+ecuacion <- round(100*(2^n) - 7*(3^n), 2)
+max(ecuacion)
+```
+
+3. Cread la sucesión de números consecutivos entre 0 y 40. A continuación, cread el vector (3*5^n - 1) con n=0,...,40. Ponedle como nombre x. Ahora, dad el subvector de los elementos que son estrictamente mayores que 3.5
+
+```{r}
+n <- 0:40
+x <- 3*5^n - 1
+which(x > 3.5)
+```
+
+4. Cread una función que os devuelva la parte real, la imaginaria, el módulo, el argumento y el conjugado de un número, mostrando solo 2 cifras significativas
+
+```{r}
+funcion1 <- function(complx){
+  print("Real:")
+  print(Re(complx),2)
+  print("Imaginaria:")
+  print(Im(complx),2)
+  print("Modulo:")
+  print(Mod(complx),2)
+  print("Argumento:")
+  print(Arg(complx),2)
+  print("Conjugado:")
+  print(Conj(complx),2)
+}
+
+funcion1(9-13i)
+```
+
+5. Cread una función que resuelva ecuaciones de segundo grado (de la forma Ax^2+Bx+C=0). No importa, por ahora, que tengáis en cuenta las que no tienen solución
+
+```{r}
+ec_2do_grad <- function(A, B, C){
+  print((-B + sqrt(B^2 - 4*A*C)) / (2*A))
+  print((-B - sqrt(B^2 - 4*A*C)) / (2*A))
+}
+
+ec_2do_grad(6,5,-6)
+```
+
+6. Tomando el vector vec = c(0,9,98,2,6,7,5,19,88,20,16,0), dad 3 opciones diferentes para calcular el subvector c(9,19,20,16)
+
+Tomando el vector vec definido en el apartado anterior, buscad
+
+    - qué entradas son pares
+
+    - qué entradas no son pares y mayores que 20
+
+    - dónde toma vec su valor máximo
+
+    - dónde toma vec sus valores mínimos
+
+```{r}
+vec <- c(0,9,98,2,6,7,5,19,88,20,16,0)
+vec[c(2,8,10,11)]
+vec[vec == 9 | vec == 19 | vec == 20 | vec == 16]
+vec[vec > 8 & vec < 21]
+
+vec[vec %% 2 == 0]
+vec[vec %% 2 == 1 & vec > 20]
+which.max(vec)
+which(vec == min(vec))
+```
+
+7. Ejercicio 1: Dad la entrada (2,2) de A · (A + A) · A
+
+```{r}
+A <- matrix(1:4, nrow = 2)
+A <- A %*% (A + A) %*% A
+A[2,2]
+```
+
+8. Ejercicio 2: Dad los valores propios de la matriz
+
+```{r}
+B <- rbind(c(2,4,-6), c(0,0,3), c(0,-2,5))
+eigen(B)$values
+```
+
+9. Ejercicio 3: Dad, redondeando a 3 cifras decimales, los vectores propios de la matriz
+
+```{r}
+C <- rbind(c(-48,35,-12), c(-134,95,-32), c(-194,133,-44))
+round(eigen(C)$vector, 3)
+```
+
+10. Ejercicio 4: Dad el rango de la matriz
+
+```{r}
+D <- rbind(c(-2,-8,-2,3), c(-3,-6,-1,2), c(-9,-22,-3,7), c(-18,-44,-8,15))
+qr(D)$rank
+```
+
+
+
