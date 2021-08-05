@@ -28,6 +28,7 @@ Si queremos representar una funcion $f(x)$
 ```{r}
 f <- function(x){sqrt(x)}
 plot(f)
+legend("bottomright", legend = expression(sqrt(x)))
 ```
 
 # Parametros de la funcion `plot`
@@ -104,17 +105,157 @@ plot(x, y, main = "Ejemplo de Grafico", pch = 8, cex = 1, type = "b", lty = 4,
      lwd = 4, xaxp = c(0,40,2), yaxp = c(-100,100,8))
 ```
 
+# Añadir puntos y rectas a un grafico
 
+* `points(x,y)` añade un punto de coordenadas (x,y) a un grafioc ya existente
+* `abline` para añadir una recta a un grafico ya existente
+    + `abline(a,b)` añade la recta $y = bx + a$ 
+    + `abline(v = x0)` añade la recta vertical $x = x_0 \cdot v$ puede estar asginado a un vector
+    + `abline(h = y0` añade la recta horizontal $y = y_0 \cdot h$ puede estar asignado a un vector
 
+```{r}
+x <- (2*(1:20))
+y <- (-1)^(1:20) * 5 * (1:20)
+plot(x, y, main = "Ejemplo de Grafico", pch = 8, cex = 1, type = "b", lty = 4,
+     lwd = 4, xaxp = c(0,40,2), yaxp = c(-100,100,8))
+points(20,0, col="red", cex = 3, pch = 16)
+abline(h = 0, lty = 2, col = "dodgerblue")
+```
 
+```{r}
+f <- function(x){
+  x^2 - 2*x + sqrt(abs(x))
+}
+plot(f, xlim = c(-3,3))
+points(0,0, pch = 19)
+points(-3:3, (-3:3)^2, col = "blue")
+abline(2,3, lty = "dashed", col = "blue")
+abline(v = 2, lty = "dotted", col = "green")
+abline(h = 5, lty = "dotdash", col = "gray")
+```
 
+```{r}
+f <- function(x){x^2}
+plot(f, xlim = c(-3,3), col = "red", lwd = 2, ylab = expression(y^2), xlab = "x")
+abline(h = 0:9, v = -3:3, lty = "dotted", col = "gray87")
+legend("bottomleft", legend = expression(x^2), bty = "l", lwd = 3, col = "red")
+```
 
+```{r}
+plot(tan, xlim = c(-pi, pi), ylim = c(-5,5))
+abline(v = c(-pi/2,pi/2), col = "red")
+```
 
+# Anadir texto y curvas a un grafico
 
+* `text(x,y, labels = "..."` añade en el punto de coordenadas (x,y) el texto especificado como argumento de labels
+    + `pos` permite indicar la posicion del texto alrededor de las coordenadas (x,y). Admite los valores:
+        + 1. Abajo
+        + 2. Izquierda
+        + 3. Arriba
+        + 4. Derecha
+        + 5. Sin especificar: el text se situa centrado en el punto (x,y)
 
+```{r}
+alumnos <- c(1:10)
+notas <- c(2,5,7,9,8,3,5,6,10,7)
+plot(alumnos,notas, main = "Grafico")
+text(alumnos,notas, 
+     labels = c("S", "A", "N", "E", "N", "S", "A", "A", "E", "N"),
+     pos = c(rep(3, times = 8),1,3))
+symbols(1,2, stars = cbind(1,0.5,1,0.5,1,0.5,1,0.5,1,0.5), add = TRUE, inches = 0.1)
+symbols(6,3, stars = cbind(1,0.5,1,0.5,1,0.5,1,0.5,1,0.5), add = TRUE, inches = 0.1)
+```
 
+```{r}
+plot(0,0)
+text(0,0, labels = "debajo", pos = 1)
+text(0,0, labels = "izquierda", pos = 2)
+text(0,0, labels = "arriba", pos = 3)
+text(0,0, labels = "derecha", pos = 4)
+points(0,1)
+text(0,1, labels = "centro") 
+```
+        
+* `lines(x,y)` añade a un grafico existente una linea poligonal que une los puntos $(x_i, y_i)$ sucesivos. (x,y) son vectores numericos
+* `curve` permite añadir la grafica de una curva a un grafico existente
+    + `add = TRUE` si no, la curva no se añade
+    + La curva se puede especificar mediante una expresion  algebraica con variabel $x$, o mediante su nombre si la hemos definido antes.
 
+```{r}
+f <- function(x){x^2}
+plot(f, xlim = c(-3,3), ylim = c(-10,10))
+points(-3:3, f(-3:3), pch = 19)
+lines(-3:3, f(-3:3), lwd = 2, lty = "dotted", col = "red")
+curve(x^3, lty = "dashed", col = "blue", add = TRUE)
+curve(x^4, lty = "dashed", col = "orchid", add = TRUE)
+```
 
+```{r}
+x <- c(5*(1:20))
+plot(x, c(exp(-x)+(-1)^x*x/2*sin(x)^2))
+lines(c(20,10,40,80,60,60,20), c(20,0,-20,-20,40,0,20), lwd = 2, 
+      col = "darkslategray1")
+curve(20*sin(x), add = TRUE, col = "green")
+```
+
+# Las leyendas de los graficos
+
+* `legend(posicion, legend = ...)` para añadir una leyenda
+    + La posicion indica donde queremos situar la leyenda. Puede ser o bien las coordenadas de la esquina superior izquierda de nuestra leyenda, o bien una de las palabras siguiente: 
+        + "bottom" / "bottomright" / "bottomleft"
+        + "top" / "topright" / "topleft"
+        + "center" / "right" / "left"
+    + `legend` contiene el vector de nombres entre comillas con los que queremos identificar a las curvas de la leyenda
+
+```{r}
+x <- seq(-2*pi, 2*pi, 0.1)
+plot(x, sin(x), type = "l", col = "blue", lwd = 3, xlab = "", ylab = "")
+lines(x, cos(x), col = "green", lwd = 3)
+lines(x, tan(x), col = "purple", lwd = 3)
+legend("bottomleft", col = c("blue", "green", "purple"), 
+       legend = c("Seno", "Coseno", "Tangente"), lwd = 3, bty = "l")
+abline(h = 0, v = 0, lty = "dotted")
+```
+
+```{r}
+f <- function(x){x^2}
+plot(f, xlim = c(-3,3), ylim = c(-10,10))
+points(-3:3, f(-3:3), pch = 19)
+lines(-3:3, f(-3:3), lwd = 2, lty = "dotted", col = "red")
+curve(x^3, lty = "dashed", col = "blue", add = TRUE)
+curve(x^4, lty = "dashed", col = "orchid", add = TRUE)
+legend("bottomright", col = c("red", "blue", "orchid"), 
+       legend = c(expression(x^2), expression(x^3), expression(x^4)), lwd = 2, 
+       lty = c("dotted", "dashed", "dashed")
+       )
+```
+
+# Añadir elementos a un grafico
+
+* `segments` para añadir segmentos a un grafico existente
+* `arrows` para añadir flechas a un grafico existente
+    + `length =` define la longitud de las orejas de la flecha
+    + `angle =` define el angulo de las orejas de la flecha
+    + `code =` con 0 sin flecha. Con 1 flecha al inicio. Con 2 flecha al final. Con 3 flecha al inicio y final
+* `symbols` para añadir simbolos a un grafico existente
+    + `add =` si se indica TRUE, va a colocar el simbolo todo en un grafico existente
+* `polygon` para añadir poligonos cerrados especificando sus vertices  a un grafico existente
+    + `density =` define la cantidad de lineas dentro del poligono
+    + `angle =` define el angulo de las lineas. Por defecto estan en 0
+
+```{r}
+x <- c(5*(1:10))
+plot(x, c(exp(-x)+(-1)^x*x/2*sin(x)^2))
+segments(10,0,40,0, col = "red", lwd = 4)
+arrows(10,0,40,-10, col = "blue", length = 0.5, angle = 5, code = 3)
+symbols(40,0, stars = cbind(1,0.5,1,0.5,1,0.5,1,0.5,1,0.5), add = TRUE, 
+        lwd = 3, inches = 0.5)
+symbols(40,0, stars = cbind(1,0.5,1,0.5,1,0.5,1,0.5,1,0.5), add = TRUE, 
+        lwd = 3)
+polygon(c(20,30,40), c(10,-10,10), col = "gold", density = 3, angle = 90, 
+        lty = 4, lwd = 5)
+```
 
 
 

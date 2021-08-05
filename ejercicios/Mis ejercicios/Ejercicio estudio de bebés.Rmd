@@ -1,0 +1,164 @@
+---
+title: "Ejercicio estudio de bebés"
+author: "Martin Malo"
+date: "1/8/2021"
+output: html_document
+---
+
+```{r}
+library(MASS)
+birthwt
+str(birthwt)
+head(birthwt)
+
+```
+
+### 2. Calcula una tabla de frecuencias relativas marginales de los pares (raza de la madre, peso inferior a 2.5 kg o no) que permita ver si la raza de la madre influye en el peso del bebé.
+
+```{r}
+df <- table(birthwt$race, birthwt$low)
+dimnames(df) <- list(
+  Raza = c("Blanca", "Negra", "Otra"),
+  Peso = c("No", "Si")
+)
+
+prop.table(df, margin = 1)
+
+
+#La raza si influye en el paso del bebe ya que el 42% de las personas de raza negra dan a luz a un bebe con menos de 2.5 kg, mientras que una persona blanca el 24%. 
+```
+
+### 3. Dibuja un diagrama de mosaico de la tabla del ejercicio anterior.
+
+```{r}
+plot(prop.table(df, margin = 1), main = "Diagrama de mosaico entre raza e indicador de bebes nacidos
+     con menos de 2.5kg",
+     col = c("lightblue", "brown1"),
+     xlab = "Raza",
+     ylab = "¿Nació con peso menor a 2.5kg?")
+```
+
+### 4. Dibuja un diagrama bidimensional de barras, con las barras organizadas en bloques, que permita visualizar la información de los ejercicios anteriores. Aprovecha para nombres adecuados a los bloques, colores a las barras, y añadir una leyenda que explique qué representa cada barra.
+
+```{r}
+barplot(prop.table(df, margin = 1),
+        main = "Diagrama bidimensional de barras de raza por indicador de peso",
+        ylim = c(0, 0.8),
+        xlab = "¿Nació con peso menor a 2.5kg?",
+        ylab = "Distribucion relativa por Raza",
+        legend.text = T,
+        col = c("antiquewhite1", "burlywood4", "azure4"),
+        beside = T)
+prop.table(df)
+```
+
+### 5. ¿Se puede obtener alguna conclusión de la tabla y el diagrama de barras anterior? Argumenta tu respuesta
+
+Como se espero, segun los datos recopilados, la raza si tiene relacion con el peso del recien nacido. Mientras que la raza blanca mayoritariamente no nace con peso menor a 2.5kg, la raza negra tiene cerca de la mitad de los nacimientos con peso menor a 2.5kg.
+
+### 6. Repite los cuatro ejercicios anteriores para los pares (madre fumadora o no, peso inferior a 2.5 kg o no) y para los pares (madre hipertensa o no, peso inferior a 2.5 kg o no.
+
+```{r}
+fuma <- table(birthwt$smoke, birthwt$low)
+dimnames(fuma) <- list(
+  Fuma = c("No fuma", "Si fuma"),
+  Peso = c("No", "Si")
+)
+
+htensa <- table(birthwt$ht, birthwt$low)
+dimnames(htensa) <- list(
+  Hipertensa = c("No es hipertensa", "Si es hipertensa"),
+  Peso = c("No", "Si")
+)
+htensa
+```
+
+```{r, Fuma}
+round(prop.table(fuma, margin = 1), 3)
+
+plot(prop.table(fuma, margin = 1), col = c("lightblue", "brown1"),
+     ylab = "¿Nació con peso menor a 2.5kg?",
+     main = "Mosaico entre mamá fumadora y nacimiento con peso menor a 2.5kg")
+
+barplot(prop.table(fuma, margin = 1),
+        beside = T,
+        legend.text = T,
+        col = c("lightblue", "brown1"),
+        ylim = c(0, 0.8),
+        xlab = "¿Nació con peso menor a 2.5kg?",
+        main = "Diagrama de barras entre mamá fumadora y nacimiento 
+        con peso menor a 2.5kg")
+```
+
+```{r, hipertensa}
+round(prop.table(htensa, margin = 1), 3)
+
+plot(prop.table(htensa, margin = 1), col = c("lightblue", "brown1"),
+     ylab = "¿Nació con peso menor a 2.5kg?",
+     main = "Mosaico entre mamá hipertensa y nacimiento con peso menor a 2.5kg")
+
+barplot(prop.table(htensa, margin = 1),
+        beside = T,
+        legend.text = T,
+        col = c("lightblue", "brown1"),
+        ylim = c(0, 0.7),
+        xlab = "¿Nació con peso menor a 2.5kg?",
+        main = "Diagrama de barras entre mamá hipertensa y nacimiento 
+        con peso menor a 2.5kg")
+```
+
+### 7. Calcula una tabla de frecuencias relativas marginales de las ternas (raza de la madre, madre fumadora o no, peso inferior a 2.5 kg o no) que permita ver si la raza de la madre y su condición de fumadora o no fumadora influyen en el peso del bebé.
+
+```{r}
+df2 <- table(birthwt$race, birthwt$smoke, birthwt$low)
+dimnames(df2) <- list(
+  Raza = c("Blanca", "Negra", "Otra"),
+  Fuma = c("No fuma", "Si fuma"),
+  Peso = c(">2.5kg", "<2.5kg")
+)
+prop.table(df2, margin = 1)
+```
+
+### 8. Dibuja un diagrama de mosaico de la tabla del ejercicio anterior.
+
+```{r}
+mosaicplot(df2, col = c("lightblue", "brown1"),
+           main = "Diagrama de mosaico entre fumadora, raza e indicador de peso")
+```
+
+Podemos concluir que a pesar de que la raza negra sigue teniendo una relacion con el peso menor a 2.5kg, las personas de raza blanca que fuman, tienen mayores probabilidades de que el bebé nazca con un peso menor a 2.5kg.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

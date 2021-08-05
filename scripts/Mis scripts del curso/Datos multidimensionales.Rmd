@@ -1,0 +1,225 @@
+---
+title: "Datos multidimensionales"
+author: "Martin Malo"
+date: "22/7/2021"
+output: html_document
+---
+
+# Datos multidimensionales
+
+### Ejemplo con 3 dimensiones
+
+```{r}
+ans <- sample(c("Si", "No"), size = 100, replace = TRUE)
+sex <- sample(c("H", "M"), size = 100, replace = TRUE)
+place <- sample(c("San Francisco", "Barcelona", "Valencia", "Cobija", "Asturias"),
+                size = 100, replace = TRUE)  
+table(sex, ans, place)
+ftable(sex,ans,place)
+ftable(sex,ans,place, col.vars = c("sex", "ans"))
+```
+
+#### Filtrar las tablas
+
+```{r}
+table(sex, ans, place)["M", "No", "Valencia"]
+table(sex, ans, place)[ , "Si", "Barcelona"]
+table(sex, ans, place)[ , , "Asturias"]
+table(sex, ans, place)[ , "No", ]
+table(sex, ans, place)["H", , ]
+```
+
+#### Frecuencias relativas
+
+```{r}
+prop.table(table(sex,ans,place)) # Frecuencias relativas globales
+prop.table(table(sex,ans,place), margin = 3) # Frecuencias relativa marginal por place
+prop.table(table(sex,ans,place), margin = c(1,3)) # Frecuencias relativa marginal por sexp y place
+
+ftable(prop.table(table(sex,ans,place)), col.vars = c("sex", "ans"))
+```
+
+# Datos HairEyeColor
+
+```{r}
+HairEyeColor
+
+total <- sum(HairEyeColor)
+```
+
+El total de individuos del estudio es `r total`
+
+```{r}
+prop.table(HairEyeColor, margin = 3)
+prop.table(HairEyeColor, margin = c(1,2))
+```
+
+```{r}
+aperm(HairEyeColor, perm = c("Sex", "Hair", "Eye"))
+```
+
+```{r}
+knitr::kable(HairEyeColor)
+```
+
+#Tablas a partir de datos cualitativos
+
+###Ejemplo de bebidad energeticas
+
+```{r}
+beb_energy <- read.table("../../data/EnergyDrink", stringsAsFactors = T, header = T)
+str(beb_energy)
+head(beb_energy)
+summary(beb_energy)
+apply(beb_energy, MARGIN = 2, FUN = table)
+apply(beb_energy, MARGIN = 2, FUN = table)$sexo
+#Equivalente:
+table(beb_energy$sexo)
+table(beb_energy)
+table(beb_energy[c(1,3)])
+ftable(beb_energy)
+```
+
+#Diagramas de barras
+
+Se utiliza la funcion `barplot()`. Para introducir datos hay que utilizar la funcion `table()` y si queremos ver los datos relativos hay que aplicar `prop.table(table())`. Para ver las barras de forma horizontal hay que usar el parametro `horiz = TRUE`. El parametro `args.legend =` imita a la funcion `legend()`. Al usar dos tipos de datos diferentes, la funcion va a tomar como principal a la que se coloque en la segunda posicion.
+
+```{r}
+barplot(table(sex,ans), main = "Diagrama de barras\n con valores de \"Sexo y Respuesta\"", 
+        col = c("blue", "red"), legend.text = T, horiz = T)
+barplot(prop.table(table(sex,ans)), col = c("blue", "red"), legend.text = T, horiz = T)
+
+```
+
+#Diagrmas circulares
+
+Para usar estos graficos se utiliza la funcion `pie()` y utiliza algunos de los parametros de la funcion `barplot()`.
+
+#Diagramas de mosaico
+
+En el diagrama de mosico las variables tienen sus reglas. La primera regal va a dividir verticalmente a las barras, la segunda variable va a darle su altura y la tercera varibale va a darle su anchura. Este ejemplo muestra que la primera variable(Hair) divide la barras verticalmente, la segunda variable(Eye) define la altura y la tercera varibale(genero) define la anchura de las barras.
+
+```{r}
+plot(HairEyeColor, main = "Grafico de mosaico de las variables HairEyeColor",
+     col = c("pink", "lightblue"))
+HairEyeColor
+```
+
+```{r}
+install.packages("vcd")
+install.packages("vcdExtra")
+mosaic3d(HairEyeColor, type = "expected", box = T, color = c("lightblue", "pink"))
+cotabplot(HairEyeColor)
+install.packages("rgl", dep = TRUE)
+```
+
+`mosaic3d()` grafica en 3D, pero instalando el paquete rgl. `cotabplot()` permite ver de una mejora manera un grafico multidimensional
+
+#Ejemplo final
+
+### JUntar color de ojos y pelo sin distinguir sexo
+
+```{r}
+HairEyeColor
+male <- HairEyeColor[, , "Male"]
+female <- HairEyeColor[, , "Female"]
+data <- as.table(male + female)
+
+```
+
+## Manipulacion de datos
+
+```{r}
+dimnames(data) <- list(
+  Pelo = c("Negro", "Marrón", "Pelirrojo", "Rubio"),
+  Ojos = c("Marrón", "Azul", "Avellana", "Verde")
+  )
+data
+```
+
+## Diagrama de mosaico
+
+```{r}
+plot(data, main = "Diagrama de mosaico", col = "lightblue")
+```
+
+## Numero total de individuos
+
+```{r}
+sum(data)
+```
+
+## Frecuencias absolutas y relativas
+
+```{r}
+colSums(data)
+rowSums(data)
+round(prop.table(colSums(data)), 3)
+round(prop.table(rowSums(data)), 3)
+```
+
+## Representacion en diagrama de barras
+
+```{r}
+barplot(prop.table(colSums(data)), main = "Frecuencias realtivas
+        de colores de ojos", col = c("burlywood4", "dodgerblue", "burlywood1",
+                                     "forestgreen"),
+        ylim = c(0, 0.4))
+
+barplot(prop.table(rowSums(data)), main = "Frecuencias relativas 
+        de colores de cabellos", col = c("black", "burlywood4", "brown2",
+                                         "darkgoldenrod1"),
+        ylim = c(0, 0.5))
+
+```
+
+## Frecuencias realtivas
+
+```{r}
+round(prop.table(data), 4) #Global
+round(prop.table(data, margin = 1), 3) #Por color de pelo
+round(prop.table(data, margin = 2), 3) #Por color de ojos
+
+#No se utiliza table luego de prop.table ya que data, ya es una tabla. Si esta no fuera una tabla tendria que usarse
+
+library(gmodels)
+CrossTable(data, prop.chisq = F)
+```
+
+##Graficos realtivos
+
+```{r}
+barplot(prop.table(data, margin = 1), beside = T, 
+        col = c("black", "burlywood4", "brown2","darkgoldenrod1"),
+        legend.text = T,
+        main = "Frecuencia realtiva de color de cabello en cada color de ojo",
+        ylim = c(0, 0.8))
+
+barplot(t(prop.table(data, margin = 2)), beside = T, 
+        col = c("burlywood4", "dodgerblue","burlywood1", "forestgreen"),
+        legend.text = T,
+        main = "Frecuencia realtiva de color de ojos en cada color de pelo",
+        ylim = c(0, 0.6))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

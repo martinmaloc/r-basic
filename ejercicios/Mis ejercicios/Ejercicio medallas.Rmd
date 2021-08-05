@@ -1,0 +1,73 @@
+---
+title: "Winter Olympic Medals"
+author: "Martin Malo"
+date: "20/7/2021"
+output: html_document
+---
+
+# Winter Olympic Medals
+
+```{r}
+medals <- read.csv("http://winterolympicsmedals.com/medals.csv", 
+                   stringsAsFactors = TRUE)
+str(medals)
+head(medals)
+tail(medals)
+```
+
+### 1. ¿Cuantos deportistas aparecen en el data frame?
+
+```{r}
+sort(table(medals$Sport), dec = TRUE)
+```
+
+### 2. ¿Cuantos han ganado medallas de oro, cuantos de plata y cuantos de bronce?
+
+```{r}
+sort(table(medals$Medal), dec = TRUE)
+```
+
+### 3. ¿En cuantos lugares se han hecho olimpiadas de invierno?
+
+```{r}
+levels(medals$City)
+```
+
+### 4. ¿Cuantos hombres y cuantas mujeres hay?
+
+```{r}
+sort(table(medals$Event.gender), dec = TRUE)
+```
+
+### 5. ¿En qué año participaron más deportistas?
+
+```{r}
+year <- sort(table(medals$Year), dec = TRUE)
+year[1]
+```
+
+### 6. El campo NOC indica el país del ganador de la medalla. ¿Qué país puede presumir de haber ganado más medallas de oro en los juegos de invierno entre 1960 y 1996?
+
+```{r}
+NOC <- sort(table(medals$NOC), dec = TRUE)
+NOC[1]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

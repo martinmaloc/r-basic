@@ -1,0 +1,125 @@
+---
+title: "Tablas de contingencia"
+author: "Martin Malo"
+date: "22/7/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r}
+datos = factor(c("H", "M", "H", "M", "M"))
+table(datos)
+table(datos)["M"]
+sum(table(datos))
+prop.table(table(datos))
+table(datos)/length(datos)
+names(which(table(datos) == 2))
+names(which(table(datos) == max(table(datos)))) #para ver la moda
+```
+## Frecuencias realtivas
+
+$$f_i = \frac{n_i}{n}$$
+
+```{r}
+x <- c(rep("Hombres", 6), rep("Mujeres", 14)) 
+table(x)
+100 * prop.table(table(x))
+names(which(table(x) == max(table(x))))
+
+moda <- function(d){
+  names(which(table(d) == max(table(d))))
+}
+m_t <- moda(datos)
+```
+
+La moda de df es: `r m_t`. 
+
+```{r}
+Respuesta <- sample(c("Si", "No"), size = length(x), replace = TRUE)
+tt2 <- table(Respuesta, x)
+xtable(tt2)
+t(table(Respuesta, x))
+prop.table(table(Respuesta, x)) #Frecuencia relativa global
+prop.table(table(Respuesta, x), margin = 1) #Frecuenca relativa marginal por fila
+prop.table(table(Respuesta, x), margin = 2) #Frecuenca relativa marginal por columnaq
+```
+
+## Paquete gmodels
+
+```{r}
+install.packages("gmodels")
+library(gmodels)
+
+sexo <- factor(c(rep("Hombres", 6), rep("Mujeres", 14))) 
+ans <- factor(c("SI","NO","SI","SI","NO","SI","NO","SI","SI","NO",
+                "SI","NO","SI","SI","NO","SI","NO","SI","SI","NO"))
+CrossTable(sexo, ans, prop.chisq = FALSE)
+```
+
+## Sumas por filas y columnas
+
+Para realizar sumas a filas o columnas o ambas, se utiliza `colSums()` y `rowSums()`
+
+```{r}
+tt <- table(sexo, ans)
+tt # Frecuencias absolutas
+prop.table(tt) #Frecuencias relativas global
+prop.table(tt, margin = 1) #frecuencias relativas por sexo
+prop.table(tt, margin = 2) #frecuencias relativas por ans
+
+colSums(tt)
+rowSums(tt)
+colSums(prop.table(tt))
+rowSums(prop.table(tt))
+
+#Todo el codigo anterior se ahorra si se utiliza CrossTable()
+
+apply(tt, FUN = sum, MARGIN = 1)
+apply(tt, FUN = sqrt, MARGIN = c(1,2))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

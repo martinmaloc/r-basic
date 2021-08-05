@@ -1,0 +1,179 @@
+---
+title: "Cargar Datos"
+author: "Martin Malo"
+date: "19/7/2021"
+output: html_document
+---
+
+# Carga de ficheros local
+
+```{r}
+df <- read.table("../../data/bulls.dat", header = FALSE,
+                 col.names = c("breed", "sale_price", "shoulder", "fat_free",
+                           "percent_ff", "frame_scale", "back_fat", "sale_height",
+                           "sale_weight"),
+                 sep = "", dec = ".")
+df
+```
+
+# Carga desde URL
+
+```{r}
+students = read.table("https://raw.githubusercontent.com/joanby/r-basic/master/data/StudentsData", 
+  col.names = c("technicalDisciplines","aptitude","maths", "language",
+                "generalKnowledge"))
+head(students,8)
+str(students)
+```
+
+# Factores en un DF
+
+```{r}
+df2 <- read.table("../../data/olive.txt", stringsAsFactors = FALSE, 
+                  header = TRUE)
+str(df2)
+```
+
+# Guardar un DF
+
+```{r}
+write.table(df2, file = "../../data/olive_2.txt", dec = ".")
+
+df4 <- read.table("../../data/olive_2.txt", header = TRUE, dec = ".")
+df4
+```
+
+```{r}
+cancer_piel <- read.table("../../../../../../../Downloads/STAT501_Lesson03/skincancer.txt",
+                          stringsAsFactors = TRUE, header = TRUE)
+str(cancer_piel)
+cancer_piel
+
+write.table(cancer_piel, file = "../../data/skincancer.txt", dec = ".")
+```
+
+# Contruir DF
+
+```{r}
+Algebra <- c(1,2,0,5,4,6,7,5,5,8)
+Analysis <- c(3,3,2,7,9,5,6,8,5,6)
+Statistics <- c(4,5,4,8,8,9,6,7,9,10)
+grades <- data.frame(Alg = Algebra, An = Analysis, Stat = Statistics)
+str(grades)
+```
+
+```{r}
+Género <- c("HOMBRE", "MUJER", "MUJER", "HOMBRE", "HOMBRE", "HOMBRE", "MUJER")
+Edad <- c(24,65,37,56,34,17,77)
+Hijos <- c(1,0,2,3,2,2,2)
+poblacion <- data.frame(Género = Género, Edad = Edad, Hijos = Hijos,
+                        stringsAsFactors = TRUE)
+fix(poblacion)
+str(poblacion)
+dim(poblacion)
+colnames(poblacion)
+summary(poblacion)
+poblacion
+
+row.names(poblacion) <- c("P1", "P2", "P3", "P4", "P5", "P6", "P7")
+dimnames(poblacion) <- list(
+  c("Sebastian", "Daniela", "Maria", "Jose", "Juan", "Andres", "Eduarda"),
+  c("Sexo", "Años", "Familia")
+)
+
+#Agregamos una fila manualmente al DF
+
+poblacion <- rbind(poblacion, c("HOMBRE", 45, 0))
+
+#Agregar columnas
+
+Ingresos <- c(200,200,100,400,500,300,600,800)
+poblacion <- cbind(poblacion, Ingresos)
+poblacion$Empleo <- c("Si", "Si", "Si", "No", "No", "Si", "Si", "Si")
+
+#Cambiar el tipo de dato a una variable
+
+as.character(poblacion$Familia)
+as.factor(poblacion$Familia)
+as.numeric(poblacion$Familia)
+```
+
+```{r}
+Género <- c("HOMBRE", "MUJER", "MUJER", "HOMBRE", "HOMBRE", "HOMBRE", "MUJER")
+Edad <- c(24,65,37,56,34,17,77)
+Hijos <- c(1,0,2,3,2,2,2)
+poblacion <- data.frame(Género = Género, Edad = Edad, Hijos = Hijos,
+                        stringsAsFactors = TRUE)
+
+#Filtramos al dataframe solo por mujeres
+poblacion_m <- poblacion[poblacion$Género == "MUJER",]
+str(poblacion_m) #Esta estructura mantiene la del DF original. 
+poblacion_m <- droplevels(poblacion_m)
+str(poblacion_m) #Esta estructura se actualizo segun a la estructura de este nuevo subdf
+```
+
+# Mejores maneras de filtracion y manipulacion de DF
+
+```{r}
+library(tidyverse)
+iris_petal <- select(iris, starts_with("Petal"))
+head(iris_petal)
+#Filtramos la columnas que comiencen con la palabra Petal
+
+iris_length <- select(iris, ends_with("Length"))
+iris_length
+#Filtramos las columnas que terminen con la palabra Length
+```
+
+# Subset
+
+```{r}
+versicolor <- subset(iris, Species == "versicolor")
+rownames(versicolor) <- 1:nrow(versicolor)
+# Renombramos las filas de versicolor para que comiencen en 1
+str(versicolor)
+head(versicolor)
+```
+
+### Tipos de filtracion
+
+`poblacion_m <- poblacion[poblacion$Género == "MUJER",]` se filtra la fila genero que contenga MUJER
+
+`iris_petal <- select(iris, starts_with("Petal"))` con tydiverse usamos la funcion select
+
+`versicolor <- subset(iris, Species == "versicolor")` con la funcion subset
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

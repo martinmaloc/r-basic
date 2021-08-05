@@ -1,0 +1,80 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Dataframe de Iris
+
+```{r}
+df <- iris
+df
+names(df) # Equivalente a colnames
+str(df)
+rownames(df)
+dimnames(df)
+nrow(df)
+ncol(df)
+dim(df)
+
+df$Petal.Length[1:10] # 10 primeras filas de petal length
+df$Species[1:10]
+```
+
+## Acceso al dataframe
+
+```{r}
+df[1:10, ]
+df[1:10, 2:4]
+df[df$Species == "setosa" & df$Sepal.Width > 4, ] # Se crea un subdf con una condicion booleana
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
